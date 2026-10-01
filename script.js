@@ -1,3 +1,4 @@
+```javascript
 // ==========================================
 // DATA
 // ==========================================
@@ -11,15 +12,32 @@ let editingTaskId = null;
 // DOM ELEMENTS
 // ==========================================
 
-const taskForm = document.getElementById("taskForm");
+const taskForm =
+    document.getElementById("taskForm");
 
-const titleInput = document.getElementById("title");
-const groupInput = document.getElementById("group");
-const itemInput = document.getElementById("item");
-const subitemInput = document.getElementById("subitem");
-const personInput = document.getElementById("person");
-const startDateInput = document.getElementById("startDate");
-const endDateInput = document.getElementById("endDate");
+const weekInput =
+    document.getElementById("week");
+
+const titleInput =
+    document.getElementById("title");
+
+const groupInput =
+    document.getElementById("group");
+
+const itemInput =
+    document.getElementById("item");
+
+const subitemInput =
+    document.getElementById("subitem");
+
+const personInput =
+    document.getElementById("person");
+
+const startDateInput =
+    document.getElementById("startDate");
+
+const endDateInput =
+    document.getElementById("endDate");
 
 const taskTableBody =
     document.getElementById("taskTableBody");
@@ -41,84 +59,140 @@ const ganttContainer =
 // ADD / EDIT TASK
 // ==========================================
 
-taskForm.addEventListener("submit", function (event) {
+taskForm.addEventListener(
+    "submit",
+    function (event) {
 
-    event.preventDefault();
-
-    const startDate = startDateInput.value;
-    const endDate = endDateInput.value;
-
-    // Validate date
-    if (endDate < startDate) {
-
-        alert("End date cannot be before start date.");
-
-        return;
-    }
+        event.preventDefault();
 
 
-    // EDIT EXISTING TASK
+        const startDate =
+            startDateInput.value;
 
-    if (editingTaskId !== null) {
+        const endDate =
+            endDateInput.value;
 
-        const task = tasks.find(
-            task => task.id === editingTaskId
-        );
 
-        if (task) {
+        // Only validate if both dates exist
 
-            task.title = titleInput.value;
-            task.group = groupInput.value;
-            task.item = itemInput.value;
-            task.subitem = subitemInput.value;
-            task.person = personInput.value;
-            task.startDate = startDate;
-            task.endDate = endDate;
+        if (
+            startDate &&
+            endDate &&
+            endDate < startDate
+        ) {
+
+            alert(
+                "End date cannot be before start date."
+            );
+
+            return;
+        }
+
+
+        // ======================================
+        // EDIT EXISTING TASK
+        // ======================================
+
+        if (editingTaskId !== null) {
+
+            const task =
+                tasks.find(
+                    task =>
+                        task.id === editingTaskId
+                );
+
+
+            if (task) {
+
+                task.week =
+                    weekInput.value;
+
+                task.title =
+                    titleInput.value;
+
+                task.group =
+                    groupInput.value;
+
+                task.item =
+                    itemInput.value;
+
+                task.subitem =
+                    subitemInput.value;
+
+                task.person =
+                    personInput.value;
+
+                task.startDate =
+                    startDate;
+
+                task.endDate =
+                    endDate;
+
+            }
+
+
+            editingTaskId = null;
+
+
+            submitButton.textContent =
+                "Add Task";
+
+
+            cancelEditButton.hidden =
+                true;
 
         }
 
-        editingTaskId = null;
 
-        submitButton.textContent = "Add Task";
+        // ======================================
+        // ADD NEW TASK
+        // ======================================
 
-        cancelEditButton.hidden = true;
+        else {
+
+            const newTask = {
+
+                id: generateID(),
+
+                week:
+                    weekInput.value,
+
+                title:
+                    titleInput.value,
+
+                group:
+                    groupInput.value,
+
+                item:
+                    itemInput.value,
+
+                subitem:
+                    subitemInput.value,
+
+                person:
+                    personInput.value,
+
+                startDate:
+                    startDate,
+
+                endDate:
+                    endDate
+
+            };
+
+
+            tasks.push(newTask);
+
+        }
+
+
+        taskForm.reset();
+
+
+        renderAll();
 
     }
-
-    // ADD NEW TASK
-
-    else {
-
-        const newTask = {
-
-            id: generateID(),
-
-            title: titleInput.value,
-
-            group: groupInput.value,
-
-            item: itemInput.value,
-
-            subitem: subitemInput.value,
-
-            person: personInput.value,
-
-            startDate: startDate,
-
-            endDate: endDate
-
-        };
-
-        tasks.push(newTask);
-
-    }
-
-
-    taskForm.reset();
-
-    renderAll();
-
-});
+);
 
 
 // ==========================================
@@ -127,10 +201,14 @@ taskForm.addEventListener("submit", function (event) {
 
 function generateID() {
 
-    return "TASK-" +
+    return (
+        "TASK-" +
         Date.now() +
         "-" +
-        Math.floor(Math.random() * 1000);
+        Math.floor(
+            Math.random() * 1000
+        )
+    );
 
 }
 
@@ -141,38 +219,65 @@ function generateID() {
 
 function editTask(id) {
 
-    const task = tasks.find(
-        task => task.id === id
-    );
+    const task =
+        tasks.find(
+            task => task.id === id
+        );
+
 
     if (!task) return;
 
 
-    titleInput.value = task.title;
-
-    groupInput.value = task.group;
-
-    itemInput.value = task.item;
-
-    subitemInput.value = task.subitem;
-
-    personInput.value = task.person;
-
-    startDateInput.value = task.startDate;
-
-    endDateInput.value = task.endDate;
+    weekInput.value =
+        task.week || "";
 
 
-    editingTaskId = id;
+    titleInput.value =
+        task.title || "";
 
-    submitButton.textContent = "Update Task";
 
-    cancelEditButton.hidden = false;
+    groupInput.value =
+        task.group || "";
+
+
+    itemInput.value =
+        task.item || "";
+
+
+    subitemInput.value =
+        task.subitem || "";
+
+
+    personInput.value =
+        task.person || "";
+
+
+    startDateInput.value =
+        task.startDate || "";
+
+
+    endDateInput.value =
+        task.endDate || "";
+
+
+    editingTaskId =
+        id;
+
+
+    submitButton.textContent =
+        "Update Task";
+
+
+    cancelEditButton.hidden =
+        false;
 
 
     window.scrollTo({
+
         top: 0,
+
         behavior: "smooth"
+
     });
 
 }
@@ -186,13 +291,19 @@ cancelEditButton.addEventListener(
     "click",
     function () {
 
-        editingTaskId = null;
+        editingTaskId =
+            null;
+
 
         taskForm.reset();
 
-        submitButton.textContent = "Add Task";
 
-        cancelEditButton.hidden = true;
+        submitButton.textContent =
+            "Add Task";
+
+
+        cancelEditButton.hidden =
+            true;
 
     }
 );
@@ -205,13 +316,19 @@ cancelEditButton.addEventListener(
 function deleteTask(id) {
 
     const confirmed =
-        confirm("Delete this task?");
+        confirm(
+            "Delete this task?"
+        );
+
 
     if (!confirmed) return;
 
-    tasks = tasks.filter(
-        task => task.id !== id
-    );
+
+    tasks =
+        tasks.filter(
+            task => task.id !== id
+        );
+
 
     renderAll();
 
@@ -240,7 +357,11 @@ function renderAll() {
 function updateTaskCount() {
 
     taskCount.textContent =
-        `${tasks.length} task${tasks.length === 1 ? "" : "s"}`;
+        `${tasks.length} task${
+            tasks.length === 1
+                ? ""
+                : "s"
+        }`;
 
 }
 
@@ -262,19 +383,37 @@ function renderTaskTable() {
 
         row.innerHTML = `
 
-            <td>${escapeHTML(task.title)}</td>
+            <td>
+                ${escapeHTML(task.week)}
+            </td>
 
-            <td>${escapeHTML(task.group)}</td>
+            <td>
+                ${escapeHTML(task.title)}
+            </td>
 
-            <td>${escapeHTML(task.item)}</td>
+            <td>
+                ${escapeHTML(task.group)}
+            </td>
 
-            <td>${escapeHTML(task.subitem)}</td>
+            <td>
+                ${escapeHTML(task.item)}
+            </td>
 
-            <td>${escapeHTML(task.person)}</td>
+            <td>
+                ${escapeHTML(task.subitem)}
+            </td>
 
-            <td>${task.startDate}</td>
+            <td>
+                ${escapeHTML(task.person)}
+            </td>
 
-            <td>${task.endDate}</td>
+            <td>
+                ${task.startDate || "-"}
+            </td>
+
+            <td>
+                ${task.endDate || "-"}
+            </td>
 
             <td>
 
@@ -286,6 +425,7 @@ function renderTaskTable() {
                     >
                         Edit
                     </button>
+
 
                     <button
                         class="delete"
@@ -299,6 +439,7 @@ function renderTaskTable() {
             </td>
 
         `;
+
 
         taskTableBody.appendChild(row);
 
@@ -325,34 +466,75 @@ function renderGantt() {
     }
 
 
-    // Find earliest and latest dates
+    // ======================================
+    // ONLY USE TASKS WITH VALID DATES
+    // ======================================
+
+    const datedTasks =
+        tasks.filter(task =>
+            task.startDate &&
+            task.endDate
+        );
+
+
+    // ======================================
+    // NO DATES
+    // ======================================
+
+    if (datedTasks.length === 0) {
+
+        ganttContainer.innerHTML =
+            "<p>No dated tasks available for the Gantt chart.</p>";
+
+        return;
+    }
+
+
+    // ======================================
+    // FIND EARLIEST / LATEST
+    // ======================================
 
     let earliest =
-        new Date(tasks[0].startDate);
+        new Date(
+            datedTasks[0].startDate
+        );
+
 
     let latest =
-        new Date(tasks[0].endDate);
+        new Date(
+            datedTasks[0].endDate
+        );
 
 
-    tasks.forEach(task => {
+    datedTasks.forEach(task => {
 
         const start =
             new Date(task.startDate);
+
 
         const end =
             new Date(task.endDate);
 
 
-        if (start < earliest)
+        if (start < earliest) {
+
             earliest = start;
 
-        if (end > latest)
+        }
+
+
+        if (end > latest) {
+
             latest = end;
+
+        }
 
     });
 
 
-    // Create date array
+    // ======================================
+    // CREATE DATE ARRAY
+    // ======================================
 
     const dates =
         getDatesBetween(
@@ -361,12 +543,16 @@ function renderGantt() {
         );
 
 
-    // Main Gantt
+    // ======================================
+    // MAIN GANTT
+    // ======================================
 
     const gantt =
         document.createElement("div");
 
-    gantt.className = "gantt";
+
+    gantt.className =
+        "gantt";
 
 
     // ======================================
@@ -376,14 +562,18 @@ function renderGantt() {
     const header =
         document.createElement("div");
 
-    header.className = "gantt-header";
+
+    header.className =
+        "gantt-header";
 
 
     const labelHeader =
         document.createElement("div");
 
+
     labelHeader.className =
         "gantt-label-header";
+
 
     labelHeader.textContent =
         "Task";
@@ -391,6 +581,7 @@ function renderGantt() {
 
     const timelineHeader =
         document.createElement("div");
+
 
     timelineHeader.className =
         "timeline-header";
@@ -401,40 +592,58 @@ function renderGantt() {
         const day =
             document.createElement("div");
 
-        day.className = "day-header";
+
+        day.className =
+            "day-header";
+
 
         day.textContent =
-            `${date.getDate()}/${date.getMonth() + 1}`;
+            `${date.getDate()}/${
+                date.getMonth() + 1
+            }`;
+
 
         timelineHeader.appendChild(day);
 
     });
 
 
-    header.appendChild(labelHeader);
+    header.appendChild(
+        labelHeader
+    );
 
-    header.appendChild(timelineHeader);
 
-    gantt.appendChild(header);
+    header.appendChild(
+        timelineHeader
+    );
+
+
+    gantt.appendChild(
+        header
+    );
 
 
     // ======================================
     // TASK ROWS
     // ======================================
 
-    tasks.forEach(task => {
+    datedTasks.forEach(task => {
 
         const row =
             document.createElement("div");
+
 
         row.className =
             "gantt-row";
 
 
-        // TASK INFORMATION
+        // ==================================
+        // TASK LABEL
+        // ==================================
 
         const label =
             document.createElement("div");
+
 
         label.className =
             "task-label";
@@ -442,60 +651,100 @@ function renderGantt() {
 
         label.innerHTML = `
 
-            <span class="task-title">
-                ${escapeHTML(task.item)}
+            <span class="task-week">
+
+                ${escapeHTML(task.week)}
+
             </span>
 
+
+            <span class="task-title">
+
+                ${escapeHTML(
+                    task.item ||
+                    task.title ||
+                    "Untitled Task"
+                )}
+
+            </span>
+
+
             <span class="task-info">
-                ${escapeHTML(task.subitem)}
-                •
-                ${escapeHTML(task.person)}
+
+                ${escapeHTML(
+                    task.subitem
+                )}
+
+                ${task.subitem ? " • " : ""}
+
+                ${escapeHTML(
+                    task.person
+                )}
+
             </span>
 
         `;
 
 
+        // ==================================
         // TIMELINE
+        // ==================================
 
         const timeline =
             document.createElement("div");
+
 
         timeline.className =
             "timeline";
 
 
-        // Grid
+        // ==================================
+        // GRID
+        // ==================================
 
         dates.forEach(() => {
 
             const day =
                 document.createElement("div");
 
+
             day.className =
                 "timeline-day";
+
 
             timeline.appendChild(day);
 
         });
 
 
+        // ==================================
         // TASK BAR
+        // ==================================
 
         const bar =
             document.createElement("div");
 
+
         bar.className =
             "task-bar";
 
+
         bar.textContent =
-            task.item;
+            task.item ||
+            task.title ||
+            "Task";
 
 
         const start =
-            new Date(task.startDate);
+            new Date(
+                task.startDate
+            );
+
 
         const end =
-            new Date(task.endDate);
+            new Date(
+                task.endDate
+            );
 
 
         const startIndex =
@@ -512,29 +761,50 @@ function renderGantt() {
             ) + 1;
 
 
-        const dayWidth = 50;
+        const dayWidth =
+            50;
 
 
         bar.style.left =
             `${startIndex * dayWidth}px`;
 
+
         bar.style.width =
-            `${duration * dayWidth - 8}px`;
+            `${Math.max(
+                duration * dayWidth - 8,
+                20
+            )}px`;
 
 
-        timeline.appendChild(bar);
+        timeline.appendChild(
+            bar
+        );
 
 
-        row.appendChild(label);
+        row.appendChild(
+            label
+        );
 
-        row.appendChild(timeline);
 
-        gantt.appendChild(row);
+        row.appendChild(
+            timeline
+        );
+
+
+        gantt.appendChild(
+            row
+        );
 
     });
 
 
-    ganttContainer.appendChild(gantt);
+    // ======================================
+    // ADD GANTT TO PAGE
+    // ======================================
+
+    ganttContainer.appendChild(
+        gantt
+    );
 
 }
 
@@ -543,12 +813,17 @@ function renderGantt() {
 // DATE UTILITIES
 // ==========================================
 
-function getDatesBetween(start, end) {
+function getDatesBetween(
+    start,
+    end
+) {
 
     const dates = [];
 
+
     const current =
         new Date(start);
+
 
     while (current <= end) {
 
@@ -556,24 +831,36 @@ function getDatesBetween(start, end) {
             new Date(current)
         );
 
+
         current.setDate(
             current.getDate() + 1
         );
 
     }
 
+
     return dates;
 
 }
 
 
-function daysBetween(start, end) {
+function daysBetween(
+    start,
+    end
+) {
 
     const milliseconds =
-        1000 * 60 * 60 * 24;
+        1000 *
+        60 *
+        60 *
+        24;
+
 
     return Math.round(
-        (end - start) / milliseconds
+        (
+            end - start
+        ) /
+        milliseconds
     );
 
 }
@@ -585,14 +872,30 @@ function daysBetween(start, end) {
 
 function escapeHTML(value) {
 
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+    return String(value || "")
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
 
 }
+
 
 // ==========================================
 // CSV EXPORT
@@ -602,13 +905,18 @@ function exportCSV() {
 
     if (tasks.length === 0) {
 
-        alert("There are no tasks to export.");
+        alert(
+            "There are no tasks to export."
+        );
 
         return;
     }
 
+
     const headers = [
+
         "ID",
+        "Week",
         "Title",
         "Group",
         "Item",
@@ -616,24 +924,37 @@ function exportCSV() {
         "Person",
         "Start Date",
         "End Date"
+
     ];
 
-    const rows = tasks.map(task => [
 
-        task.id,
-        task.title,
-        task.group,
-        task.item,
-        task.subitem,
-        task.person,
-        task.startDate,
-        task.endDate
+    const rows =
+        tasks.map(task => [
 
-    ]);
+            task.id,
+            task.week,
+            task.title,
+            task.group,
+            task.item,
+            task.subitem,
+            task.person,
+            task.startDate,
+            task.endDate
 
-    const csv = createCSV(headers, rows);
+        ]);
 
-    downloadCSV(csv, "gantt_tasks.csv");
+
+    const csv =
+        createCSV(
+            headers,
+            rows
+        );
+
+
+    downloadCSV(
+        csv,
+        "gantt_tasks.csv"
+    );
 
 }
 
@@ -646,14 +967,18 @@ async function saveAsCSV() {
 
     if (tasks.length === 0) {
 
-        alert("There are no tasks to save.");
+        alert(
+            "There are no tasks to save."
+        );
 
         return;
     }
 
 
     const headers = [
+
         "ID",
+        "Week",
         "Title",
         "Group",
         "Item",
@@ -661,27 +986,41 @@ async function saveAsCSV() {
         "Person",
         "Start Date",
         "End Date"
+
     ];
 
-    const rows = tasks.map(task => [
 
-        task.id,
-        task.title,
-        task.group,
-        task.item,
-        task.subitem,
-        task.person,
-        task.startDate,
-        task.endDate
+    const rows =
+        tasks.map(task => [
 
-    ]);
+            task.id,
+            task.week,
+            task.title,
+            task.group,
+            task.item,
+            task.subitem,
+            task.person,
+            task.startDate,
+            task.endDate
 
-    const csv = createCSV(headers, rows);
+        ]);
 
 
-    // File System Access API
+    const csv =
+        createCSV(
+            headers,
+            rows
+        );
 
-    if ("showSaveFilePicker" in window) {
+
+    // ======================================
+    // FILE SYSTEM ACCESS API
+    // ======================================
+
+    if (
+        "showSaveFilePicker"
+        in window
+    ) {
 
         try {
 
@@ -698,8 +1037,12 @@ async function saveAsCSV() {
                                 "CSV File",
 
                             accept: {
-                                "text/csv": [".csv"]
+
+                                "text/csv":
+                                    [".csv"]
+
                             }
+
                         }
 
                     ]
@@ -710,20 +1053,33 @@ async function saveAsCSV() {
             const writable =
                 await handle.createWritable();
 
-            await writable.write(csv);
+
+            await writable.write(
+                csv
+            );
+
 
             await writable.close();
 
-            alert("CSV saved successfully.");
+
+            alert(
+                "CSV saved successfully."
+            );
 
         }
 
+
         catch (error) {
 
-            // User cancelled the save dialog
-            if (error.name !== "AbortError") {
+            if (
+                error.name !==
+                "AbortError"
+            ) {
 
-                console.error(error);
+                console.error(
+                    error
+                );
+
 
                 alert(
                     "Unable to save the file."
@@ -735,8 +1091,10 @@ async function saveAsCSV() {
 
     }
 
-    // Browser does not support
-    // showSaveFilePicker
+
+    // ======================================
+    // FALLBACK
+    // ======================================
 
     else {
 
@@ -754,11 +1112,17 @@ async function saveAsCSV() {
 // CREATE CSV
 // ==========================================
 
-function createCSV(headers, rows) {
+function createCSV(
+    headers,
+    rows
+) {
 
     const allRows = [
+
         headers,
+
         ...rows
+
     ];
 
 
@@ -768,7 +1132,9 @@ function createCSV(headers, rows) {
             return row
                 .map(value => {
 
-                    return csvEscape(value);
+                    return csvEscape(
+                        value
+                    );
 
                 })
                 .join(",");
@@ -785,8 +1151,10 @@ function createCSV(headers, rows) {
 
 function csvEscape(value) {
 
-    if (value === null ||
-        value === undefined) {
+    if (
+        value === null ||
+        value === undefined
+    ) {
 
         return "";
 
@@ -797,21 +1165,23 @@ function csvEscape(value) {
         String(value);
 
 
-    // CSV requires quotes when
-    // value contains comma,
-    // quotation marks, or newline.
-
     if (
+
         stringValue.includes(",") ||
+
         stringValue.includes('"') ||
+
         stringValue.includes("\n")
+
     ) {
 
         return '"' +
+
             stringValue.replaceAll(
                 '"',
                 '""'
             ) +
+
             '"';
 
     }
@@ -826,44 +1196,70 @@ function csvEscape(value) {
 // DOWNLOAD CSV
 // ==========================================
 
-function downloadCSV(csv, filename) {
-
-    // UTF-8 BOM helps Excel correctly
-    // recognise the file as UTF-8.
+function downloadCSV(
+    csv,
+    filename
+) {
 
     const blob =
         new Blob(
-            ["\ufeff" + csv],
+
+            [
+                "\ufeff" +
+                csv
+            ],
+
             {
-                type: "text/csv;charset=utf-8;"
+                type:
+                    "text/csv;charset=utf-8;"
             }
+
         );
 
 
     const url =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+            blob
+        );
 
 
     const link =
-        document.createElement("a");
+        document.createElement(
+            "a"
+        );
 
 
-    link.href = url;
+    link.href =
+        url;
 
-    link.download = filename;
 
-    document.body.appendChild(link);
+    link.download =
+        filename;
+
+
+    document.body.appendChild(
+        link
+    );
+
 
     link.click();
 
-    document.body.removeChild(link);
 
-    URL.revokeObjectURL(url);
+    document.body.removeChild(
+        link
+    );
+
+
+    URL.revokeObjectURL(
+        url
+    );
 
 }
+
 
 // ==========================================
 // INITIAL RENDER
 // ==========================================
 
 renderAll();
+```
